@@ -64,5 +64,9 @@ public class Topico {
     public void desactivar() {
         this.activo = false;
     }
+
+    public void reactivar() {
+        this.activo = true;
+    }
     
 }

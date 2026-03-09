@@ -56,6 +56,12 @@ public class TopicoController {
         return ResponseEntity.ok(page);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<Page<DatosListaTopico>> listarTodosLosTopicos(@PageableDefault(size = 10, sort = {"fechaCreacion"}) Pageable paginacion) {
+        var page = repository.findAll(paginacion).map(DatosListaTopico::new);
+        return ResponseEntity.ok(page);
+    }
+
     @Transactional
     @PutMapping()
     public ResponseEntity<DatosDetalleTopico> actualizarTopico(@RequestBody @Valid DatosActualizarTopico datos) {
@@ -73,6 +79,15 @@ public class TopicoController {
         topico.desactivar();
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/reactivar")
+    @Transactional
+    public ResponseEntity<DatosDetalleTopico> reactivarTopico(@PathVariable Long id) {
+        var topico = repository.getReferenceById(id);
+        topico.reactivar();
+
+        return ResponseEntity.ok(new DatosDetalleTopico(topico));
     }
     
     @GetMapping("/{id}")
